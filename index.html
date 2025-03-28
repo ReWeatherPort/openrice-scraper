@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenRice 餐廳探索</title>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- 引入外部 CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- 頂部導航欄 -->
+  <nav>
+    <div class="logo">OpenRice 探索</div>
+    <div class="search-filter">
+      <!-- 搜索框 -->
+      <input type="text" id="searchInput" placeholder="Search restaurant..." oninput="filterRestaurants()">
+      <!-- 排序下拉選單 -->
+      <select id="sortBy" onchange="filterRestaurants()">
+        <option value="default">Sort by..</option>
+        <option value="ratingHigh">Rating: High to Low</option>
+        <option value="ratingLow">Rating: Low to High</option>
+      </select>
+      <!-- 評分篩選 -->
+      <select id="filterRating" onchange="filterRestaurants()">
+        <option value="0">All Ratings</option>
+        <option value="4.0">Above 4.0</option>
+        <option value="4.5">Above 4.5</option>
+      </select>
+      <!-- 隨機推薦按鈕 -->
+      <button onclick="getRandomRecommendation()">隨機推薦</button>
+    </div>
+  </nav>
+
+  <!-- Hero 區 -->
+  <section class="hero">
+    <h1>探索香港美食</h1>
+    <p>發掘 OpenRice 上受歡迎嘅餐廳，立即獲取你嘅美食建議！</p>
+    <button onclick="scrollToSection('gridSection')">瀏覽餐廳</button>
+  </section>
+
+  <!-- 主內容區 -->
+  <div class="container">
+    <!-- 隨機推薦區域 -->
+    <div class="random-advice" id="randomAdviceSection">
+      <h2>隨機推薦餐廳</h2>
+      <p>今日唔知食咩？按下面個按鈕獲得隨機建議！</p>
+      <button onclick="getRandomRecommendation()">取得隨機推薦</button>
+      <div class="result" id="recommendationResult" style="display:none;"></div>
+    </div>
+
+    <!-- 餐廳卡片瀏覽區 -->
+    <section id="gridSection">
+      <h2 style="text-align:center; margin-bottom:20px;">餐廳目錄</h2>
+      <div class="restaurant-grid" id="restaurantGrid">
+        <!-- 動態生成餐廳卡片 -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer 區 -->
+  <footer>
+    <p>&copy; 2025 OpenRice Data Scraper. All rights reserved.</p>
+  </footer>
+
+  <!-- 引入外部 JavaScript -->
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

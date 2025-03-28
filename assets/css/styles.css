@@ -1,0 +1,236 @@
+/* Reset 同基本設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #FAFAFA;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* 頂部導航欄 */
+  nav {
+    background: #fff;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  nav .logo {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #B39DDB;
+  }
+  
+  nav .search-filter {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  nav input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    outline: none;
+  }
+  
+  nav select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    background: #fff;
+    color: #333;
+  }
+  
+  nav button {
+    background: #B39DDB;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    color: #fff;
+  }
+  
+  nav button:hover {
+    background: #9E88D4;
+  }
+  
+  /* Hero 區 */
+  .hero {
+    background: linear-gradient(135deg, #EDE7F6, #D1C4E9);
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    color: #B39DDB;
+  }
+  
+  .hero p {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    color: #555;
+  }
+  
+  .hero button {
+    padding: 12px 24px;
+    background: #B39DDB;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #fff;
+    transition: background 0.3s;
+  }
+  
+  .hero button:hover {
+    background: #9E88D4;
+  }
+  
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  
+  /* 隨機推薦區 */
+  .random-advice {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .random-advice button {
+    padding: 12px 24px;
+    background: #B39DDB;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .random-advice button:hover {
+    background: #9E88D4;
+  }
+  
+  .random-advice .result {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #F5F5F5;
+  }
+  
+  /* 餐廳卡片區 */
+  .restaurant-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .restaurant-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  .restaurant-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .restaurant-card header {
+    background: #B39DDB;
+    padding: 15px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .restaurant-card .card-body {
+    padding: 15px;
+    background: #FAFAFA;
+  }
+  
+  .restaurant-card .card-body p {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  .restaurant-card .card-body .btn {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 0;
+    background: #B39DDB;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 500;
+    transition: background 0.3s;
+  }
+  
+  .restaurant-card .card-body .btn:hover {
+    background: #9E88D4;
+  }
+  
+  .restaurant-card .card-footer {
+    background: #F5F5F5;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    border-top: 1px solid #eee;
+    color: #777;
+  }
+  
+  /* Footer 區 */
+  footer {
+    background: #fff;
+    color: #777;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+    margin-top: 40px;
+  }
+  
+  /* Media Query */
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      gap: 10px;
+    }
+    nav .search-filter {
+      justify-content: center;
+    }
+  }
