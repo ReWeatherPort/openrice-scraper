@@ -52,21 +52,6 @@
       <h2 style="text-align:center; margin-bottom:20px;">餐廳目錄</h2>
       <div class="restaurant-grid" id="restaurantGrid">
         <!-- 餐廳卡片由 JavaScript 動態生成 -->
-        {% if records %}
-          {% for rec in records %}
-            <div class="restaurant-card">
-              <header>{{ rec.name }}</header>
-              <div class="card-body">
-                <p><strong>菜系：</strong>{{ rec.cuisine }}</p>
-                <p><strong>種類：</strong>{{ rec.type }}</p>
-                <p><strong>價位：</strong>{{ rec.price }}</p>
-              </div>
-              <div class="card-footer">美食推薦</div>
-            </div>
-          {% endfor %}
-        {% else %}
-          <p style="text-align:center; width:100%;">無資料可顯示</p>
-        {% endif %}
       </div>
     </section>
   </main>
@@ -76,9 +61,9 @@
     <p>© 2025 OpenRice Data Scraper. All rights reserved.</p>
   </footer>
 
-  <!-- JavaScript: 改為動態載入 openrice_data.json -->
+  <!-- JavaScript: 動態載入 openrice_data.json -->
   <script>
-    // 由 openrice_data.json 載入餐廳資料，將 demo 資料替換為真實資料
+    // 由 openrice_data.json 載入餐廳資料
     let restaurants = [];
 
     // Demo 菜單建議語句保持不變
@@ -129,8 +114,8 @@
         const body = document.createElement('div');
         body.className = 'card-body';
         body.innerHTML = `
-          <p><strong>地址：</strong> ${restaurant.address || ''}</p>
-          <p><strong>評分：</strong> ${restaurant.rating || ''}</p>
+          <p><strong>菜式：</strong> ${restaurant.cuisine || ''}</p>
+          <p><strong>食物類型：</strong> ${restaurant.type || ''}</p>
           <a href="#" class="btn" onclick="alert('更多資訊功能未開放'); return false;">了解詳情</a>
         `;
         card.appendChild(body);
@@ -152,15 +137,16 @@
 
       filteredData = restaurants.filter(restaurant => {
         const matchName = restaurant.name.toLowerCase().includes(searchQuery);
-        // 此 demo 例子假設資料中附有 rating；如果 openrice_data.json 裡無 rating，可用其他字段代替
-        const matchRating = restaurant.rating >= filterRating;
+        // 由於已移除 rating 字段，篩選功能需要調整
+        // 如果 openrice_data.json 無 rating 字段，可以移除此篩選條件或用其他字段代替
+        const matchRating = restaurant.rating ? restaurant.rating >= filterRating : true;
         return matchName && matchRating;
       });
 
       if (sortBy === 'ratingHigh') {
-        filteredData.sort((a, b) => b.rating - a.rating);
+        filteredData.sort((a, b) => (b.rating || 0) - (a.rating || 0));
       } else if (sortBy === 'ratingLow') {
-        filteredData.sort((a, b) => a.rating - b.rating);
+        filteredData.sort((a, b) => (a.rating || 0) - (b.rating || 0));
       }
       generateRestaurantCards(filteredData);
     }
@@ -174,8 +160,8 @@
       resultDiv.style.display = 'block';
       resultDiv.innerHTML = `
         <h3 style="color:#B39DDB;">${randomRestaurant.name}</h3>
-        <p><strong>地址：</strong>${randomRestaurant.address || ''}</p>
-        <p><strong>評分：</strong>${randomRestaurant.rating || ''}</p>
+        <p><strong>菜式：</strong>${randomRestaurant.cuisine || ''}</p>
+        <p><strong>食物類型：</strong>${randomRestaurant.type || ''}</p>
         <p style="margin-top:10px; font-weight:600; color:#B39DDB;">今日推薦：${randomAdvice}</p>
       `;
       resultDiv.scrollIntoView({ behavior: "smooth" });
