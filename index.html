@@ -52,7 +52,6 @@
       <h2 style="text-align:center; margin-bottom:20px;">餐廳目錄</h2>
       <div class="restaurant-grid" id="restaurantGrid">
         <!-- 餐廳卡片由 JavaScript 動態生成 -->
-        <!-- 後端傳入嘅資料（records）會由 Flask 導入，亦可用 AJAX 取得 -->
         {% if records %}
           {% for rec in records %}
             <div class="restaurant-card">
@@ -77,18 +76,12 @@
     <p>© 2025 OpenRice Data Scraper. All rights reserved.</p>
   </footer>
 
-  <!-- JavaScript: 處理搜尋、排序、篩選及隨機推薦 -->
+  <!-- JavaScript: 改為動態載入 openrice_data.json -->
   <script>
-    // Demo 餐廳資料（此處資料由後端傳入，若希望前端動態處理可改為 AJAX 載入 openrice_data.json）
-    const restaurants = [
-      { "name": "餐廳 A", "address": "香港中環XX街", "rating": 4.5 },
-      { "name": "餐廳 B", "address": "九龍彌敦道XX號", "rating": 4.2 },
-      { "name": "餐廳 C", "address": "新界沙田XX路", "rating": 4.7 },
-      { "name": "餐廳 D", "address": "香港旺角XX大道", "rating": 4.0 },
-      { "name": "餐廳 E", "address": "九龍尖沙咀XX街", "rating": 4.6 }
-    ];
-    
-    // Demo 菜單建議語句
+    // 由 openrice_data.json 載入餐廳資料，將 demo 資料替換為真實資料
+    let restaurants = [];
+
+    // Demo 菜單建議語句保持不變
     const menuAdvices = [
       "試下佢哋嘅招牌燒味！",
       "享受一份精緻嘅甜品作完美收官。",
@@ -96,10 +89,28 @@
       "嚐試佢哋極受歡迎嘅意大利麵。",
       "今日來點道特色咖哩飯，暖心又滿足！"
     ];
-    
-    let filteredData = [...restaurants];
-    
-    // 生成餐廳卡片（僅供 demo 用，實際資料依後端傳入而定）
+
+    let filteredData = [];
+
+    // 從 openrice_data.json 讀取資料
+    function loadRestaurants() {
+      fetch('openrice_data.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('HTTP error: ' + response.status);
+          }
+          return response.json();
+        })
+        .then(data => {
+          restaurants = data;
+          // 初始化篩選數據
+          filteredData = [...restaurants];
+          generateRestaurantCards(filteredData);
+        })
+        .catch(error => console.error('讀取 JSON 出錯:', error));
+    }
+
+    // 生成餐廳卡片
     function generateRestaurantCards(data) {
       const grid = document.getElementById('restaurantGrid');
       grid.innerHTML = '';
@@ -110,42 +121,42 @@
       data.forEach(restaurant => {
         const card = document.createElement('div');
         card.className = 'restaurant-card';
-        
+
         const header = document.createElement('header');
         header.textContent = restaurant.name;
         card.appendChild(header);
-        
+
         const body = document.createElement('div');
         body.className = 'card-body';
         body.innerHTML = `
-          <p><strong>地址：</strong> ${restaurant.address}</p>
-          <p><strong>評分：</strong> ${restaurant.rating}</p>
+          <p><strong>地址：</strong> ${restaurant.address || ''}</p>
+          <p><strong>評分：</strong> ${restaurant.rating || ''}</p>
           <a href="#" class="btn" onclick="alert('更多資訊功能未開放'); return false;">了解詳情</a>
         `;
         card.appendChild(body);
-        
+
         const footer = document.createElement('div');
         footer.className = 'card-footer';
         footer.textContent = '美食推薦';
         card.appendChild(footer);
-        
+
         grid.appendChild(card);
       });
     }
-    
-    // 搜尋、排序同篩選功能
+
+    // 搜尋、排序及篩選功能
     function filterRestaurants() {
       const searchQuery = document.getElementById('searchInput').value.toLowerCase();
       const sortBy = document.getElementById('sortBy').value;
       const filterRating = parseFloat(document.getElementById('filterRating').value);
-    
+
       filteredData = restaurants.filter(restaurant => {
         const matchName = restaurant.name.toLowerCase().includes(searchQuery);
-        // 此 demo 只使用評分進行篩選
+        // 此 demo 例子假設資料中附有 rating；如果 openrice_data.json 裡無 rating，可用其他字段代替
         const matchRating = restaurant.rating >= filterRating;
         return matchName && matchRating;
       });
-    
+
       if (sortBy === 'ratingHigh') {
         filteredData.sort((a, b) => b.rating - a.rating);
       } else if (sortBy === 'ratingLow') {
@@ -153,7 +164,7 @@
       }
       generateRestaurantCards(filteredData);
     }
-    
+
     // 隨機推薦功能
     function getRandomRecommendation() {
       if (restaurants.length === 0) return;
@@ -163,21 +174,21 @@
       resultDiv.style.display = 'block';
       resultDiv.innerHTML = `
         <h3 style="color:#B39DDB;">${randomRestaurant.name}</h3>
-        <p><strong>地址：</strong>${randomRestaurant.address}</p>
-        <p><strong>評分：</strong>${randomRestaurant.rating}</p>
+        <p><strong>地址：</strong>${randomRestaurant.address || ''}</p>
+        <p><strong>評分：</strong>${randomRestaurant.rating || ''}</p>
         <p style="margin-top:10px; font-weight:600; color:#B39DDB;">今日推薦：${randomAdvice}</p>
       `;
       resultDiv.scrollIntoView({ behavior: "smooth" });
     }
-    
+
     // 滾動到指定區塊
     function scrollToSection(sectionId) {
       document.getElementById(sectionId).scrollIntoView({ behavior: "smooth" });
     }
-    
-    // 頁面初始化（demo 用）
-    window.onload = () => {
-      generateRestaurantCards(restaurants);
+
+    // 頁面初始化：載入 JSON 資料
+    window.onload = function() {
+      loadRestaurants();
     };
   </script>
 </body>
