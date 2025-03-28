@@ -3,68 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenRice 餐廳探索</title>
+  <title>OpenRice 餐廳探索 - HTML6 UI Design</title>
   <!-- Google Fonts: Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <!-- 引入外部 CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 頂部導航欄 -->
-  <nav>
-    <div class="logo">OpenRice 探索</div>
-    <div class="search-filter">
-      <!-- 搜索框 -->
-      <input type="text" id="searchInput" placeholder="Search restaurant..." oninput="filterRestaurants()">
-      <!-- 排序下拉選單 -->
-      <select id="sortBy" onchange="filterRestaurants()">
-        <option value="default">Sort by..</option>
-        <option value="ratingHigh">Rating: High to Low</option>
-        <option value="ratingLow">Rating: Low to High</option>
-      </select>
-      <!-- 評分篩選 -->
-      <select id="filterRating" onchange="filterRestaurants()">
-        <option value="0">All Ratings</option>
-        <option value="4.0">Above 4.0</option>
-        <option value="4.5">Above 4.5</option>
-      </select>
-      <!-- 隨機推薦按鈕 -->
-      <button onclick="getRandomRecommendation()">隨機推薦</button>
+  <!-- 頂部導航 -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">OpenRice 探索</div>
+      <div class="search-filter">
+        <input type="text" id="searchInput" placeholder="Search restaurant..." oninput="filterRestaurants()">
+        <select id="sortBy" onchange="filterRestaurants()">
+          <option value="default">Sort by..</option>
+          <option value="ratingHigh">Rating: High to Low</option>
+          <option value="ratingLow">Rating: Low to High</option>
+        </select>
+        <select id="filterRating" onchange="filterRestaurants()">
+          <option value="0">All Ratings</option>
+          <option value="4.0">Above 4.0</option>
+          <option value="4.5">Above 4.5</option>
+        </select>
+        <button onclick="getRandomRecommendation()">隨機推薦</button>
+      </div>
     </div>
-  </nav>
+  </header>
 
   <!-- Hero 區 -->
   <section class="hero">
     <h1>探索香港美食</h1>
-    <p>發掘 OpenRice 上受歡迎嘅餐廳，立即獲取你嘅美食建議！</p>
+    <p>發掘 OpenRice 上最受歡迎嘅餐廳，立即獲取你嘅美食建議！</p>
     <button onclick="scrollToSection('gridSection')">瀏覽餐廳</button>
   </section>
 
-  <!-- 主內容區 -->
-  <div class="container">
-    <!-- 隨機推薦區域 -->
-    <div class="random-advice" id="randomAdviceSection">
+  <!-- 主要內容區 -->
+  <main>
+    <!-- 隨機推薦區 -->
+    <section class="random-advice" id="randomAdviceSection">
       <h2>隨機推薦餐廳</h2>
-      <p>今日唔知食咩？按下面個按鈕獲得隨機建議！</p>
+      <p>今日唔知食咩？按下面按鈕獲取隨機建議！</p>
       <button onclick="getRandomRecommendation()">取得隨機推薦</button>
       <div class="result" id="recommendationResult" style="display:none;"></div>
-    </div>
+    </section>
 
-    <!-- 餐廳卡片瀏覽區 -->
+    <!-- 餐廳卡片展示區 -->
     <section id="gridSection">
       <h2 style="text-align:center; margin-bottom:20px;">餐廳目錄</h2>
       <div class="restaurant-grid" id="restaurantGrid">
-        <!-- 動態生成餐廳卡片 -->
+        <!-- 餐廳卡片由 JavaScript 動態生成 -->
+        <!-- 後端傳入嘅資料（records）會由 Flask 導入，亦可用 AJAX 取得 -->
+        {% if records %}
+          {% for rec in records %}
+            <div class="restaurant-card">
+              <header>{{ rec.name }}</header>
+              <div class="card-body">
+                <p><strong>菜系：</strong>{{ rec.cuisine }}</p>
+                <p><strong>種類：</strong>{{ rec.type }}</p>
+                <p><strong>價位：</strong>{{ rec.price }}</p>
+              </div>
+              <div class="card-footer">美食推薦</div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p style="text-align:center; width:100%;">無資料可顯示</p>
+        {% endif %}
       </div>
     </section>
-  </div>
+  </main>
 
-  <!-- Footer 區 -->
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 OpenRice Data Scraper. All rights reserved.</p>
+    <p>© 2025 OpenRice Data Scraper. All rights reserved.</p>
   </footer>
 
-  <!-- 引入外部 JavaScript -->
-  <script src="assets/js/main.js"></script>
+  <!-- JavaScript: 處理搜尋、排序、篩選及隨機推薦 -->
+  <script>
+    // Demo 餐廳資料（此處資料由後端傳入，若希望前端動態處理可改為 AJAX 載入 openrice_data.json）
+    const restaurants = [
+      { "name": "餐廳 A", "address": "香港中環XX街", "rating": 4.5 },
+      { "name": "餐廳 B", "address": "九龍彌敦道XX號", "rating": 4.2 },
+      { "name": "餐廳 C", "address": "新界沙田XX路", "rating": 4.7 },
+      { "name": "餐廳 D", "address": "香港旺角XX大道", "rating": 4.0 },
+      { "name": "餐廳 E", "address": "九龍尖沙咀XX街", "rating": 4.6 }
+    ];
+    
+    // Demo 菜單建議語句
+    const menuAdvices = [
+      "試下佢哋嘅招牌燒味！",
+      "享受一份精緻嘅甜品作完美收官。",
+      "點個招牌海鮮拼盤，絕對正！",
+      "嚐試佢哋極受歡迎嘅意大利麵。",
+      "今日來點道特色咖哩飯，暖心又滿足！"
+    ];
+    
+    let filteredData = [...restaurants];
+    
+    // 生成餐廳卡片（僅供 demo 用，實際資料依後端傳入而定）
+    function generateRestaurantCards(data) {
+      const grid = document.getElementById('restaurantGrid');
+      grid.innerHTML = '';
+      if (data.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; width:100%;">無符合條件嘅餐廳</p>';
+        return;
+      }
+      data.forEach(restaurant => {
+        const card = document.createElement('div');
+        card.className = 'restaurant-card';
+        
+        const header = document.createElement('header');
+        header.textContent = restaurant.name;
+        card.appendChild(header);
+        
+        const body = document.createElement('div');
+        body.className = 'card-body';
+        body.innerHTML = `
+          <p><strong>地址：</strong> ${restaurant.address}</p>
+          <p><strong>評分：</strong> ${restaurant.rating}</p>
+          <a href="#" class="btn" onclick="alert('更多資訊功能未開放'); return false;">了解詳情</a>
+        `;
+        card.appendChild(body);
+        
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+        footer.textContent = '美食推薦';
+        card.appendChild(footer);
+        
+        grid.appendChild(card);
+      });
+    }
+    
+    // 搜尋、排序同篩選功能
+    function filterRestaurants() {
+      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+      const sortBy = document.getElementById('sortBy').value;
+      const filterRating = parseFloat(document.getElementById('filterRating').value);
+    
+      filteredData = restaurants.filter(restaurant => {
+        const matchName = restaurant.name.toLowerCase().includes(searchQuery);
+        // 此 demo 只使用評分進行篩選
+        const matchRating = restaurant.rating >= filterRating;
+        return matchName && matchRating;
+      });
+    
+      if (sortBy === 'ratingHigh') {
+        filteredData.sort((a, b) => b.rating - a.rating);
+      } else if (sortBy === 'ratingLow') {
+        filteredData.sort((a, b) => a.rating - b.rating);
+      }
+      generateRestaurantCards(filteredData);
+    }
+    
+    // 隨機推薦功能
+    function getRandomRecommendation() {
+      if (restaurants.length === 0) return;
+      const randomRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)];
+      const randomAdvice = menuAdvices[Math.floor(Math.random() * menuAdvices.length)];
+      const resultDiv = document.getElementById('recommendationResult');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `
+        <h3 style="color:#B39DDB;">${randomRestaurant.name}</h3>
+        <p><strong>地址：</strong>${randomRestaurant.address}</p>
+        <p><strong>評分：</strong>${randomRestaurant.rating}</p>
+        <p style="margin-top:10px; font-weight:600; color:#B39DDB;">今日推薦：${randomAdvice}</p>
+      `;
+      resultDiv.scrollIntoView({ behavior: "smooth" });
+    }
+    
+    // 滾動到指定區塊
+    function scrollToSection(sectionId) {
+      document.getElementById(sectionId).scrollIntoView({ behavior: "smooth" });
+    }
+    
+    // 頁面初始化（demo 用）
+    window.onload = () => {
+      generateRestaurantCards(restaurants);
+    };
+  </script>
 </body>
 </html>

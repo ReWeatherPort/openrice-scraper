@@ -1,0 +1,176 @@
+[
+    {
+        "name": "泰誇張",
+        "cuisine": "泰國菜",
+        "type": "咖喱",
+        "price": "$101-200"
+    },
+    {
+        "name": "楚撚記大排檔 (日富里百好大廈)",
+        "cuisine": "粵菜 (廣東)",
+        "type": "中菜館",
+        "price": "$101-200"
+    },
+    {
+        "name": "馬六",
+        "cuisine": "新加坡菜",
+        "type": "馬來西亞菜",
+        "price": "$51-100"
+    },
+    {
+        "name": "斗滾 (適安大廈)",
+        "cuisine": "港式",
+        "type": "火鍋",
+        "price": "$201-400"
+    },
+    {
+        "name": "The Praya",
+        "cuisine": "粵菜 (廣東)",
+        "type": "港式",
+        "price": "$401-800"
+    },
+    {
+        "name": "SOUTH LANE (南里)",
+        "cuisine": "西式",
+        "type": "咖啡店",
+        "price": "$101-200"
+    },
+    {
+        "name": "The Big Bite Flame-Grill",
+        "cuisine": "美國菜",
+        "type": "烤肉",
+        "price": "$101-200"
+    },
+    {
+        "name": "No Milkshake No Life (山道)",
+        "cuisine": "西式",
+        "type": "三文治",
+        "price": "$101-200"
+    },
+    {
+        "name": "巴辣仔烤魚",
+        "cuisine": "川菜 (四川)",
+        "type": "火鍋",
+        "price": "$101-200"
+    },
+    {
+        "name": "Dear Neighbor",
+        "cuisine": "西式",
+        "type": "All Day Breakfast",
+        "price": "$51-100"
+    },
+    {
+        "name": "廿一由八",
+        "cuisine": "西式",
+        "type": "咖啡店",
+        "price": "$101-200"
+    },
+    {
+        "name": "TBC",
+        "cuisine": "多國菜",
+        "type": "咖啡店",
+        "price": "$101-200"
+    },
+    {
+        "name": "好螺記",
+        "cuisine": "桂菜 (廣西)",
+        "type": "粉麵/米線",
+        "price": "$50以下"
+    },
+    {
+        "name": "德記潮州菜館",
+        "cuisine": "潮州菜",
+        "type": "中菜館",
+        "price": "$101-200"
+    },
+    {
+        "name": "HOHON Eatery",
+        "cuisine": "西式",
+        "type": "漢堡包",
+        "price": "$101-200"
+    },
+    {
+        "name": "大源味",
+        "cuisine": "港式",
+        "type": "粉麵/米線",
+        "price": "$50以下"
+    },
+    {
+        "name": "彩麵",
+        "cuisine": "日本菜",
+        "type": "拉麵",
+        "price": "$51-100"
+    },
+    {
+        "name": "串到爆",
+        "cuisine": "川菜 (四川)",
+        "type": "串燒",
+        "price": "$101-200"
+    },
+    {
+        "name": "彩aya",
+        "cuisine": "日本菜",
+        "type": "拉麵",
+        "price": "$51-100"
+    },
+    {
+        "name": "波記燒臘粉麵店",
+        "cuisine": "港式",
+        "type": "粉麵/米線",
+        "price": "$50以下"
+    },
+    {
+        "name": "TGIF",
+        "cuisine": "西式",
+        "type": "咖啡店",
+        "price": "$101-200"
+    },
+    {
+        "name": "活一鮮",
+        "cuisine": "日本菜",
+        "type": "壽司/刺身",
+        "price": "$101-200"
+    },
+    {
+        "name": "湘聚小廚",
+        "cuisine": "川菜 (四川)",
+        "type": "湘菜 (湖南)",
+        "price": "$51-100"
+    },
+    {
+        "name": "G’Day",
+        "cuisine": "多國菜",
+        "type": "咖啡店",
+        "price": "$201-400"
+    },
+    {
+        "name": "一口沙嗲專門店",
+        "cuisine": "新加坡菜",
+        "type": "馬來西亞菜",
+        "price": "$51-100"
+    },
+    {
+        "name": "塘西豐味館私房菜",
+        "cuisine": "粵菜 (廣東)",
+        "type": "中菜館",
+        "price": "$101-200"
+    },
+    {
+        "name": "Fineprint",
+        "cuisine": "西式",
+        "type": "咖啡店",
+        "price": "$50以下"
+    },
+    {
+        "name": "ARF Cafe",
+        "cuisine": "西式",
+        "type": "All Day Breakfast",
+        "price": "$101-200"
+    },
+    {
+        "name": "馬來一菜館",
+        "cuisine": "新加坡菜",
+        "type": "馬來西亞菜",
+        "price": "$201-400"
+    }
+]
