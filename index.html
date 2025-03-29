@@ -155,7 +155,6 @@
         const card = document.createElement('div');
         card.className = 'restaurant-card';
         card.innerHTML = `
-          <img src="${restaurant.image_url || 'https://via.placeholder.com/280x180'}" alt="${restaurant.name}" class="restaurant-image">
           <header>${restaurant.name}</header>
           <div class="card-body">
             <p><strong>菜式：</strong> ${restaurant.cuisine || ''}</p>
