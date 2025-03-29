@@ -14,16 +14,24 @@
     <div class="nav-container">
       <div class="logo">OpenRice 探索</div>
       <div class="search-filter">
-        <input type="text" id="searchInput" placeholder="Search restaurant..." oninput="filterRestaurants()">
+        <input type="text" id="searchInput" placeholder="搜尋餐廳或菜式..." oninput="filterRestaurants()">
         <select id="sortBy" onchange="filterRestaurants()">
-          <option value="default">Sort by..</option>
-          <option value="ratingHigh">Rating: High to Low</option>
-          <option value="ratingLow">Rating: Low to High</option>
+          <option value="default">排序方式...</option>
+          <option value="ratingHigh">評分：高到低</option>
+          <option value="ratingLow">評分：低到高</option>
+          <option value="reviewHigh">評論數：高到低</option>
         </select>
-        <select id="filterRating" onchange="filterRestaurants()">
-          <option value="0">All Ratings</option>
-          <option value="4.0">Above 4.0</option>
-          <option value="4.5">Above 4.5</option>
+        <select id="filterCuisine" onchange="filterRestaurants()">
+          <option value="">所有菜式</option>
+          <!-- 動態填充 -->
+        </select>
+        <select id="filterPrice" onchange="filterRestaurants()">
+          <option value="">所有價位</option>
+          <!-- 動態填充 -->
+        </select>
+        <select id="filterType" onchange="filterRestaurants()">
+          <option value="">所有類型</option>
+          <!-- 動態填充 -->
         </select>
         <button onclick="getRandomRecommendation()">隨機推薦</button>
       </div>
@@ -50,8 +58,12 @@
     <!-- 餐廳卡片展示區 -->
     <section id="gridSection">
       <h2 style="text-align:center; margin-bottom:20px;">餐廳目錄</h2>
-      <div class="restaurant-grid" id="restaurantGrid">
-        <!-- 餐廳卡片由 JavaScript 動態生成 -->
+      <div class="restaurant-grid" id="restaurantGrid"></div>
+      <!-- 分頁控制 -->
+      <div class="pagination">
+        <button onclick="changePage(-1)" id="prevPage" disabled>上一頁</button>
+        <span id="pageInfo"></span>
+        <button onclick="changePage(1)" id="nextPage">下一頁</button>
       </div>
     </section>
   </main>
@@ -61,12 +73,14 @@
     <p>© 2025 OpenRice Data Scraper. All rights reserved.</p>
   </footer>
 
-  <!-- JavaScript: 動態載入 openrice_data.json -->
+  <!-- JavaScript -->
   <script>
-    // 由 openrice_data.json 載入餐廳資料
     let restaurants = [];
+    let filteredData = [];
+    const itemsPerPage = 6; // 每頁顯示 6 個餐廳
+    let currentPage = 1;
 
-    // Demo 菜單建議語句保持不變
+    // 菜單建議語句
     const menuAdvices = [
       "試下佢哋嘅招牌燒味！",
       "享受一份精緻嘅甜品作完美收官。",
@@ -74,8 +88,6 @@
       "嚐試佢哋極受歡迎嘅意大利麵。",
       "今日來點道特色咖哩飯，暖心又滿足！"
     ];
-
-    let filteredData = [];
 
     // 從 openrice_data.json 讀取資料
     function loadRestaurants() {
@@ -88,14 +100,45 @@
         })
         .then(data => {
           restaurants = data;
-          // 初始化篩選數據
           filteredData = [...restaurants];
-          generateRestaurantCards(filteredData);
+          populateFilters();
+          updatePage();
         })
         .catch(error => console.error('讀取 JSON 出錯:', error));
     }
 
-    // 生成餐廳卡片
+    // 動態填充篩選選項
+    function populateFilters() {
+      const cuisines = [...new Set(restaurants.map(r => r.cuisine))];
+      const prices = [...new Set(restaurants.map(r => r.price))];
+      const types = [...new Set(restaurants.map(r => r.type))];
+
+      const cuisineSelect = document.getElementById('filterCuisine');
+      cuisines.forEach(cuisine => {
+        const option = document.createElement('option');
+        option.value = cuisine;
+        option.textContent = cuisine;
+        cuisineSelect.appendChild(option);
+      });
+
+      const priceSelect = document.getElementById('filterPrice');
+      prices.forEach(price => {
+        const option = document.createElement('option');
+        option.value = price;
+        option.textContent = price;
+        priceSelect.appendChild(option);
+      });
+
+      const typeSelect = document.getElementById('filterType');
+      types.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type;
+        typeSelect.appendChild(option);
+      });
+    }
+
+    // 生成餐廳卡片（分頁）
     function generateRestaurantCards(data) {
       const grid = document.getElementById('restaurantGrid');
       grid.innerHTML = '';
@@ -103,52 +146,84 @@
         grid.innerHTML = '<p style="text-align:center; width:100%;">無符合條件嘅餐廳</p>';
         return;
       }
-      data.forEach(restaurant => {
+
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const paginatedData = data.slice(start, end);
+
+      paginatedData.forEach(restaurant => {
         const card = document.createElement('div');
         card.className = 'restaurant-card';
-
-        const header = document.createElement('header');
-        header.textContent = restaurant.name;
-        card.appendChild(header);
-
-        const body = document.createElement('div');
-        body.className = 'card-body';
-        body.innerHTML = `
-          <p><strong>菜式：</strong> ${restaurant.cuisine || ''}</p>
-          <p><strong>食物類型：</strong> ${restaurant.type || ''}</p>
-          <a href="#" class="btn" onclick="alert('更多資訊功能未開放'); return false;">了解詳情</a>
+        card.innerHTML = `
+          <img src="${restaurant.image_url || 'https://via.placeholder.com/280x180'}" alt="${restaurant.name}" class="restaurant-image">
+          <header>${restaurant.name}</header>
+          <div class="card-body">
+            <p><strong>菜式：</strong> ${restaurant.cuisine || ''}</p>
+            <p><strong>食物類型：</strong> ${restaurant.type || ''}</p>
+            <p><strong>價位：</strong> ${restaurant.price || ''}</p>
+            <p><strong>電話：</strong> ${restaurant.phone || ''}</p>
+            <p><strong>營業時間：</strong> ${restaurant.opening_hours || ''}</p>
+            <p><strong>評分：</strong> ${restaurant.rating || 'N/A'} (${restaurant.review_count || 0} 則評論)</p>
+            <p><strong>特色菜式：</strong> ${restaurant.special_dish || ''}</p>
+            <a href="#" class="btn" onclick="alert('更多資訊功能未開放'); return false;">了解詳情</a>
+          </div>
+          <div class="card-footer">美食推薦</div>
         `;
-        card.appendChild(body);
-
-        const footer = document.createElement('div');
-        footer.className = 'card-footer';
-        footer.textContent = '美食推薦';
-        card.appendChild(footer);
-
         grid.appendChild(card);
       });
+
+      updatePagination(data.length);
+    }
+
+    // 更新分頁資訊
+    function updatePagination(totalItems) {
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      document.getElementById('pageInfo').textContent = `第 ${currentPage} 頁 / 共 ${totalPages} 頁`;
+      document.getElementById('prevPage').disabled = currentPage === 1;
+      document.getElementById('nextPage').disabled = currentPage === totalPages;
+    }
+
+    // 切換頁面
+    function changePage(direction) {
+      currentPage += direction;
+      if (currentPage < 1) currentPage = 1;
+      updatePage();
+    }
+
+    // 更新頁面
+    function updatePage() {
+      generateRestaurantCards(filteredData);
+      window.scrollTo({ top: document.getElementById('gridSection').offsetTop - 60, behavior: 'smooth' });
     }
 
     // 搜尋、排序及篩選功能
     function filterRestaurants() {
       const searchQuery = document.getElementById('searchInput').value.toLowerCase();
       const sortBy = document.getElementById('sortBy').value;
-      const filterRating = parseFloat(document.getElementById('filterRating').value);
+      const filterCuisine = document.getElementById('filterCuisine').value;
+      const filterPrice = document.getElementById('filterPrice').value;
+      const filterType = document.getElementById('filterType').value;
 
       filteredData = restaurants.filter(restaurant => {
-        const matchName = restaurant.name.toLowerCase().includes(searchQuery);
-        // 由於已移除 rating 字段，篩選功能需要調整
-        // 如果 openrice_data.json 無 rating 字段，可以移除此篩選條件或用其他字段代替
-        const matchRating = restaurant.rating ? restaurant.rating >= filterRating : true;
-        return matchName && matchRating;
+        const matchSearch = restaurant.name.toLowerCase().includes(searchQuery) || 
+                           restaurant.cuisine.toLowerCase().includes(searchQuery) ||
+                           restaurant.special_dish.toLowerCase().includes(searchQuery);
+        const matchCuisine = filterCuisine ? restaurant.cuisine === filterCuisine : true;
+        const matchPrice = filterPrice ? restaurant.price === filterPrice : true;
+        const matchType = filterType ? restaurant.type === filterType : true;
+        return matchSearch && matchCuisine && matchPrice && matchType;
       });
 
       if (sortBy === 'ratingHigh') {
         filteredData.sort((a, b) => (b.rating || 0) - (a.rating || 0));
       } else if (sortBy === 'ratingLow') {
         filteredData.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+      } else if (sortBy === 'reviewHigh') {
+        filteredData.sort((a, b) => (b.review_count || 0) - (a.review_count || 0));
       }
-      generateRestaurantCards(filteredData);
+
+      currentPage = 1; // 重置到第一頁
+      updatePage();
     }
 
     // 隨機推薦功能
@@ -160,8 +235,14 @@
       resultDiv.style.display = 'block';
       resultDiv.innerHTML = `
         <h3 style="color:#B39DDB;">${randomRestaurant.name}</h3>
+        <img src="${randomRestaurant.image_url || 'https://via.placeholder.com/280x180'}" alt="${randomRestaurant.name}" style="max-width:100%; border-radius:5px; margin-bottom:10px;">
         <p><strong>菜式：</strong>${randomRestaurant.cuisine || ''}</p>
         <p><strong>食物類型：</strong>${randomRestaurant.type || ''}</p>
+        <p><strong>價位：</strong>${randomRestaurant.price || ''}</p>
+        <p><strong>電話：</strong>${randomRestaurant.phone || ''}</p>
+        <p><strong>營業時間：</strong>${randomRestaurant.opening_hours || ''}</p>
+        <p><strong>評分：</strong>${randomRestaurant.rating || 'N/A'} (${randomRestaurant.review_count || 0} 則評論)</p>
+        <p><strong>特色菜式：</strong>${randomRestaurant.special_dish || ''}</p>
         <p style="margin-top:10px; font-weight:600; color:#B39DDB;">今日推薦：${randomAdvice}</p>
       `;
       resultDiv.scrollIntoView({ behavior: "smooth" });
@@ -172,7 +253,7 @@
       document.getElementById(sectionId).scrollIntoView({ behavior: "smooth" });
     }
 
-    // 頁面初始化：載入 JSON 資料
+    // 頁面初始化
     window.onload = function() {
       loadRestaurants();
     };

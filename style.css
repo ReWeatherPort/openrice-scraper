@@ -1,216 +1,259 @@
 /* Reset 同基本設定 */
 *, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: #FAFAFA;
-    color: #333;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  /* 頂部導航 */
-  header {
-    background: #fff;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid #ddd;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #FAFAFA;
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 頂部導航 */
+header {
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #ddd;
+}
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  flex-wrap: wrap;
+}
+.logo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #B39DDB;
+}
+.search-filter {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.search-filter input[type="text"],
+.search-filter select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  background: #fff;
+  color: #333;
+}
+.search-filter input[type="text"] {
+  width: 200px;
+}
+.search-filter button {
+  background: #B39DDB;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+.search-filter button:hover {
+  background: #9E88D4;
+}
+
+/* Hero 區 */
+.hero {
+  background: linear-gradient(135deg, #EDE7F6, #D1C4E9);
+  text-align: center;
+  padding: 60px 20px;
+}
+.hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  color: #B39DDB;
+}
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: #555;
+}
+.hero button {
+  padding: 12px 24px;
+  background: #B39DDB;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+.hero button:hover {
+  background: #9E88D4;
+}
+
+/* 主要內容區 */
+main {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* 隨機推薦區 */
+.random-advice {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+.random-advice h2 {
+  margin-bottom: 15px;
+}
+.random-advice button {
+  padding: 12px 24px;
+  background: #B39DDB;
+  border: none;
+  font-size: 1rem;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.random-advice button:hover {
+  background: #9E88D4;
+}
+.random-advice .result {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #F5F5F5;
+}
+
+/* 餐廳卡片區 */
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.restaurant-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.restaurant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+.restaurant-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 2px solid #B39DDB;
+}
+.restaurant-card header {
+  background: #B39DDB;
+  padding: 15px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  color: #fff;
+}
+.card-body {
+  padding: 15px;
+  background: #FAFAFA;
+}
+.card-body p {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: #555;
+}
+.card-body .btn {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px 0;
+  background: #B39DDB;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+.card-body .btn:hover {
+  background: #9E88D4;
+}
+.card-footer {
+  background: #F5F5F5;
+  padding: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  border-top: 1px solid #eee;
+  color: #777;
+}
+
+/* 分頁樣式 */
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.pagination button {
+  padding: 8px 16px;
+  background: #B39DDB;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.pagination button:hover:not(:disabled) {
+  background: #9E88D4;
+}
+.pagination span {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Footer */
+footer {
+  background: #fff;
+  color: #777;
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #ddd;
+  margin-top: 40px;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
   .nav-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 30px;
-    flex-wrap: wrap;
-  }
-  .logo {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #B39DDB;
-  }
-  .search-filter {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .search-filter input[type="text"],
-  .search-filter select {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-    background: #fff;
-    color: #333;
-  }
-  .search-filter input[type="text"] {
-    width: 200px;
-  }
-  .search-filter button {
-    background: #B39DDB;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    color: #fff;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-  }
-  .search-filter button:hover {
-    background: #9E88D4;
-  }
-  
-  /* Hero 區 */
-  .hero {
-    background: linear-gradient(135deg, #EDE7F6, #D1C4E9);
-    text-align: center;
-    padding: 60px 20px;
-  }
-  .hero h1 {
-    font-size: 2.8rem;
-    margin-bottom: 10px;
-    color: #B39DDB;
-  }
-  .hero p {
-    font-size: 1.1rem;
-    margin-bottom: 25px;
-    color: #555;
-  }
-  .hero button {
-    padding: 12px 24px;
-    background: #B39DDB;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    color: #fff;
-    transition: background 0.3s ease;
-  }
-  .hero button:hover {
-    background: #9E88D4;
-  }
-  
-  /* 主要內容區 */
-  main {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-  }
-  
-  /* 隨機推薦區 */
-  .random-advice {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
-  }
-  .random-advice h2 {
-    margin-bottom: 15px;
-  }
-  .random-advice button {
-    padding: 12px 24px;
-    background: #B39DDB;
-    border: none;
-    font-size: 1rem;
-    border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  .random-advice button:hover {
-    background: #9E88D4;
-  }
-  .random-advice .result {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #F5F5F5;
-  }
-  
-  /* 餐廳卡片區 */
-  .restaurant-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-  }
-  .restaurant-card {
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-  }
-  .restaurant-card:hover {
-    transform: translateY(-5px);
-  }
-  .restaurant-card header {
-    background: #B39DDB;
-    padding: 15px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    text-align: center;
-    color: #fff;
-  }
-  .card-body {
-    padding: 15px;
-    background: #FAFAFA;
-  }
-  .card-body p {
-    margin-bottom: 10px;
-    font-size: 0.95rem;
-    color: #555;
-  }
-  .card-body .btn {
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-    padding: 10px 0;
-    background: #B39DDB;
-    border-radius: 5px;
-    color: #fff;
-    font-weight: 500;
-    transition: background 0.3s ease;
-  }
-  .card-body .btn:hover {
-    background: #9E88D4;
-  }
-  .card-footer {
-    background: #F5F5F5;
-    padding: 10px;
-    text-align: center;
-    font-size: 0.9rem;
-    border-top: 1px solid #eee;
-    color: #777;
-  }
-  
-  /* Footer */
-  footer {
-    background: #fff;
-    color: #777;
-    text-align: center;
-    padding: 20px;
-    border-top: 1px solid #ddd;
-    margin-top: 40px;
-  }
-  
-  /* Media Query for responsiveness */
-  @media (max-width: 768px) {
-    .nav-container {
       flex-direction: column;
       gap: 10px;
-    }
-    .search-filter {
-      justify-content: center;
-    }
   }
+  .search-filter {
+      justify-content: center;
+  }
+  .search-filter input[type="text"] {
+      width: 100%;
+  }
+  .restaurant-grid {
+      grid-template-columns: 1fr;
+  }
+}

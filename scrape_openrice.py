@@ -11,7 +11,6 @@ def fetch_page_source(url):
     """
     使用 Selenium 抓取指定 URL 嘅頁面 HTML
     """
-    # 設定 Chrome 無頭模式
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
@@ -26,10 +25,7 @@ def fetch_page_source(url):
     print("打開 URL：", url)
     driver.get(url)
     
-    # 等待 5 秒以確保大部分動態內容載入
     time.sleep(5)
-    
-    # 模擬頁面滾動，促使 lazy load 資料出現
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(3)
     
@@ -39,37 +35,26 @@ def fetch_page_source(url):
 
 def parse_dataset(html):
     """
-    使用 BeautifulSoup 解析 HTML，並提取餐廳名稱與菜系/種類/價位信息  
-    依據你提供的範例，假設提取邏輯如下：  
-      - 餐廳名稱位於 div.poi-name 中。  
-      - 其他信息位於包含 class "poi-list-cell-line-info" 的元素裏，其內部
-        <span class="poi-list-cell-line-info-link"> 依序包含：  
-          [0] 地區 (例如：西環) → 忽略  
-          [1] 菜系 (例如：日本菜 或 港式)  
-          [2] 種類 (例如：拉麵 或 粉麵/米線)  
-          [3] 價位 (例如：$51-100 或 $50以下)
+    使用 BeautifulSoup 解析 HTML，提取更多餐廳資訊
     """
     soup = BeautifulSoup(html, "html.parser")
     records = []
     
-    # 根據實際情況，此處以 'div.poi-list-cell-desktop-right-top-wrapper-main'
-    # 作為每筆資料的父容器（觀察提供的部分 HTML 可知，餐廳名稱與資訊都在此區域）
     containers = soup.select("div.poi-list-cell-desktop-right-top-wrapper-main")
     if not containers:
-        print("未能依據選擇器找到任何餐廳容器, 請檢查 HTML 結構!")
+        print("未能依據選擇器找到任何餐廳容器，請檢查 HTML 結構!")
     
     for container in containers:
-        # 嘗試從 container 中取得餐廳名稱
+        # 餐廳名稱
         name_elem = container.select_one("div.poi-name")
         if not name_elem:
             continue
         name = name_elem.get_text(strip=True)
         
-        # 嘗試抓取包含「菜系/種類/價位」信息的容器（此處包含在 div.poi-list-cell-line-info）
+        # 菜系、種類、價位
         info_container = container.select_one("div.poi-list-cell-line-info")
         if info_container:
             spans = info_container.select("span.poi-list-cell-line-info-link")
-            # 預期至少 4 個 span: [0] 地區、[1] 菜系、[2] 種類、[3] 價位
             if len(spans) >= 4:
                 cuisine = spans[1].get_text(strip=True)
                 dish_type = spans[2].get_text(strip=True)
@@ -79,13 +64,43 @@ def parse_dataset(html):
         else:
             cuisine = dish_type = price = ""
         
-        # 僅保留符合預期的資料
+        # 評分
+        rating_elem = container.select_one("span.score")
+        rating = float(rating_elem.get_text(strip=True)) if rating_elem else 0.0
+        
+        # 評論數量
+        review_elem = container.select_one("span.review-count")
+        review_count = int(review_elem.get_text(strip=True).replace("則", "")) if review_elem else 0
+        
+        # 電話（假設喺某個元素中，可能需要點擊進入餐廳詳情頁）
+        phone_elem = container.select_one("span.phone-number")
+        phone = phone_elem.get_text(strip=True) if phone_elem else ""
+        
+        # 營業時間
+        hours_elem = container.select_one("span.opening-hours")
+        opening_hours = hours_elem.get_text(strip=True) if hours_elem else ""
+        
+        # 特色菜式（假設喺某個標籤中）
+        special_dish_elem = container.select_one("span.special-dish")
+        special_dish = special_dish_elem.get_text(strip=True) if special_dish_elem else ""
+        
+        # 圖片 URL
+        image_elem = container.select_one("img.restaurant-image")
+        image_url = image_elem['src'] if image_elem and 'src' in image_elem.attrs else ""
+        
+        # 僅保留完整資料
         if name and cuisine and dish_type and price:
             records.append({
                 "name": name,
                 "cuisine": cuisine,
                 "type": dish_type,
-                "price": price
+                "price": price,
+                "phone": phone,
+                "opening_hours": opening_hours,
+                "rating": rating,
+                "review_count": review_count,
+                "special_dish": special_dish,
+                "image_url": image_url
             })
         else:
             print("資料不完整，跳過：", name)
@@ -103,8 +118,7 @@ def main():
         print("抓取完成，數據已存入 openrice_data.json")
         print("數據內容：")
         for rec in dataset:
-            # 根據你的需求，只展示部分（例如：彩aya  日本菜  拉麵  $51-100）
-            print(rec["name"], rec["cuisine"], rec["type"], rec["price"])
+            print(rec["name"], rec["cuisine"], rec["type"], rec["price"], rec["rating"], rec["review_count"])
     else:
         print("未提取到任何餐廳資料。")
 
